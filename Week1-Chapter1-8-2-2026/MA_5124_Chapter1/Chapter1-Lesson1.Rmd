@@ -2,7 +2,7 @@
 title: "MA 5124 Financial Time Series Analysis and Forecasting"
 subtitle: "Chapter 1: Introduction to time series and forecasting <br/> Lesson 1"
 author: "Dr. Priyanga Talagala"
-date: "23-06-2024"
+date: "08-02-2026"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -40,13 +40,15 @@ library(tidyverse)
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
 style_duo_accent(
-  primary_color = "#081d58",
-  title_slide_text_color = "#edf8b1",
-  secondary_color = "#43a383",
+  primary_color = "#ffffff",
+  title_slide_text_color = "#081d58", 
+  secondary_color = "#ffffff",
   inverse_header_color = "#081d58",
   text_font_size = "1.1em",
   text_color = "#000",
   text_bold_color = "#fd8d3c",
+  link_color = "#1f78b4",
+  header_color = "#081d58"
 
   
 )
