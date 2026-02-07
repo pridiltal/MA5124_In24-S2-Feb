@@ -27,13 +27,15 @@ library(kableExtra)
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
 style_duo_accent(
-  primary_color = "#081d58",
-  title_slide_text_color = "#edf8b1",
-  secondary_color = "#00ccff",
+  primary_color = "#ffffff",
+  title_slide_text_color = "#081d58", 
+  secondary_color = "#ffffff",
   inverse_header_color = "#081d58",
-  text_font_size = "1em",
+  text_font_size = "1.2em",
   text_color = "#000",
   text_bold_color = "#fd8d3c",
+  link_color = "#1f78b4",
+  header_color = "#081d58",
 
   
 )
@@ -48,8 +50,9 @@ class: center, middle, inverse
 --
 
 
-## Senior Lecturer 
-Dr. Priyanga D. Talagala
+## Dr. Priyanga D. Talagala
+
+Senior Lecturer, Department of Computational Mathematics, University of Moratuwa
 
 PhD in Statistics, 
 Monash University, Australia
@@ -100,35 +103,45 @@ class: middle
 ---
 class:  inverse, middle
 ## Key references
-
+.pull-left[
 
 Hyndman, R.J.& Athanasopoulos, G. (2020) ***Forecasting: principles and practice***, 3rd edition [OTexts.org/fpp3/](https://otexts.com/fpp3/)
 
   * Free and online
   * Data sets in associated R packages
   * R code for examples
+]
+  
+.pull-right[ 
 
-```{r   out.width = "60%", echo = FALSE, fig.cap='', fig.align='center'}
+```{r   out.width = "100%", echo = FALSE, fig.cap='', fig.align='center'}
 knitr::include_graphics("fig/fpp3author.png")
 ```
+]
 ---
+
 class:  inverse, middle
 ## Key references
 
+.pull-left[
+
 Chatfield, C., & Xing, H. (2019). The analysis of time series: an introduction with R. CRC press.
 
-```{r   out.width = "30%", echo = FALSE, fig.cap='', fig.align='center'}
+].pull-right[
+```{r   out.width = "60%", echo = FALSE, fig.cap='', fig.align='center'}
 knitr::include_graphics("fig/textbook2.jpg")
 ```
- 
+]
+
 ---
 class: middle
 ##  Assessment (Tentative plan)
 
 Task | Value
 ---------|------------
-Assignment 1 |  20%
+Assignment 1 |  10%
 Assignment 2 |  10%
+Quiz 1 |  10%
 End-semester examination   |  70%
 
 ---
