@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MA 5124 Financial Time Series Analysis and Forecasting</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="myremark.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MA 5124 Financial Time Series Analysis and Forecasting
+]
+.subtitle[
+## Chapter 1: Introduction to time series and forecasting <br/> Lesson 1
+]
+.author[
+### Dr. Priyanga Talagala
+]
+.date[
+### 23-06-2024
+]
+
+---
+
+
+
+
+
+
+## Types of Data
+
+1. Cross-sectional data
+2. Time series data
+3. Pooled data
+3. Panel data
+
+&lt;!--Applied econometrics: yellow book (home) Dimitrios asteriou and stephen G. Hall--&gt;
+
+---
+## 1. Cross-sectional data
+
+- A cross-sectional data set consists of a sample of individuals, households, countries or any other type of unit at **a specific point in time.**
+--
+
+- Sometimes, data across all units do not correspond to exactly the same time point. 
+--
+
+- Example: A survey that collects data from questionnaire surveys of different units within a month. 
+--
+
+- In this case, we can ignore the minor time differences in collection. 
+
+&lt;!--and the data collected will still be viewed as a cross sectional data.--&gt;
+--
+Eg: 
+
+ID   | Monthly Income (in LKR)
+-----|----------------------
+1    |  83000
+2    | 150000
+3    | 40000
+4    | 65000
+---
+background-image:url('fig/7_uselection.png')
+background-position: 50% 50%
+background-size: 70%
+class: right, top
+
+---
+## 2. Time series data
+
+&lt;!-- covid data: https://ourworldindata.org/grapher/daily-covid-cases-deaths?country=~LKA--&gt;
+
+- A time series is a sequence of observations taken **sequentially in time**.
+--
+
+- Time series data are arranged in chronological order and can have different time frequencies (eg: biannual, annual, quarterly, monthly, weekly, daily, hourly, etc.)
+--
+&lt;!-- chronological: following the order in which they occurred.--&gt;
+- Examples of time series data
+  - Annual Google profits
+  - Monthly rainfall
+  - Weekly retail sales
+  - Daily confirmed COVID-19 cases and deaths
+  - Hourly electricity demand
+
+---
+background-image:url('fig/8_coronavirus-data-explorer.png')
+background-position: 50% 50%
+background-size: 70%
+class: right, top
+---
+
+background-image:url('fig/8_daily-covid-cases-deaths.png')
+background-position: 50% 50%
+background-size: 70%
+class: right, top
+---
+## 3. Pooled data
+
+- Pooled data occur when we have a “time series of cross sections,” but the observations in each cross section do not necessarily refer to the same unit.
+
+--
+
+## 4. Panel data
+
+- This is a **special type** of pooled data in which the samples of the same cross-sectional units observed over time.
+
+&lt;!--at multiple points in time.--&gt;
+---
+### Stochastic Processes
+
+A stochastic process is a family of indexed random variables `\(\{X(t,\omega);t \in T;\omega \in \Omega\}\)` defined on a probability space `\((\Omega,\beta,\textbf{P})\)` where `\(T\)` is an arbitrary set.
+
+&lt;img src="fig/9_stochastic.png" width="70%" /&gt;
+
+
+---
+There are many ways of visualizing a stochastic process.
+
+  (i) For each choice of `\(t \in T\)`, `\(X(t, \omega)\)` is a random variable.&lt;/br&gt;
+  (ii) For each choice of `\(\omega \in \Omega\)`, `\(X(t, \omega)\)` is a function of `\(t\)`. &lt;/br&gt;
+  (iii) For each choice of `\(\omega\)` and `\(t\)`, `\(X(t, \omega)\)` is a number.&lt;/br&gt;
+  (iv) In general it is an ensemble (family) of functions `\(X(t, \omega)\)` where `\(t\)` and `\(w\)` can take different possible values. 
+
+&lt;img src="fig/9_stochastic.png" width="70%" /&gt;
+
+---
+
+## Time series data
+
+- **The observed time series or time series to be analyzed is a particular realization of a stochastic process.**
+--
+
+- Anything that is observed sequentially over time is a time series.
+--
+
+- In this course, we will only consider time series that are observed at **regular intervals of time.**
+&lt;!--(e.g., hourly, daily, weekly, monthly, quarterly, annually).--&gt;
+--
+
+- **Irregularly spaced time series** can also possible, but are beyond the scope of this course
+
+--
+
+## Forecasting
+
+- Forecasting is about **predicting the future** as accurately as possible, given all of the information available, including historical data and knowledge of any future events that might impact the forecasts.
+--
+
+- Forecasting is estimating how the sequence of observations will continue into the future.
+
+---
+
+## Factors affecting forecastability
+
+Something is easier to forecast if:
+
+ - we have a good understanding of the factors that contribute to it
+ - there is lots of data available;
+ - the forecasts cannot affect the thing we are trying to forecast.
+ - there is relatively low natural/unexplainable random variation.
+ - the future is somewhat similar to the past
+ 
+---
+## Types of Methods
+
+- **Qualitative** forecasts
+    - Judgmental forecasting is the only option if no historical data (for new product, new market conditions), or if the data available are not relevant to the forecasts. 
+    - See fpp3 Chapter 6: https://otexts.com/fpp3/judgmental.html.
+--
+- **Quantitative** forecasts: can be applied 
+  - if numerical information about the past is available
+  - if it is reasonable to assume that some aspects of the past patterns will continue into the future
+  
+&lt;!--when two conditions are satisfied--&gt;
+---
+## Quantitative forecasts
+
+- Most quantitative forecasting problems use either
+  - Time series data (collected at regular intervals over time).
+  - Cross-sectional data (collected at a single point in time).
+
+&lt;!-- explanation fpp3 Section 1.4--&gt;
+
+--
+## Basic steps in a forecasting task
+
+- Problem definition
+- Collect data
+- Preliminary (exploratory) analysis (data Visualization)
+- Modelling
+- Evaluate the fitted model
+---
+
+class: center, middle, inverse
+
+# The statistical forecasting perspective
+
+---
+
+## Sample futures
+
+
+
+
+
+
+
+![](Chapter1-Lesson1_files/figure-html/austa1a-1.png)&lt;!-- --&gt;
+
+
+&lt;!--Explanation: Section 1.7 fpp3--&gt;
+---
+
+## Forecast intervals
+
+
+
+![](Chapter1-Lesson1_files/figure-html/austa2-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+## Statistical forecasting
+
+- Thing to be forecast: a random variable, `\(y_t\)`.
+- Forecast distribution: If `\({\cal I}\)` is all observations, then `\(y_{t} |{\cal I}\)` means "the random variable `\(y_{t}\)` given what we know in `\({\cal I}\)`".
+- The **point forecast** is the mean (or median) of `\(y_{t} |{\cal I}\)`
+- The **forecast variance** is `\(\text{var}[y_{t} |{\cal I}]\)`
+- A prediction interval or **interval forecast** is a range of values of `\(y_t\)` with high probability.
+- With time series, `\({y}_{t|t-1} = y_t | \{y_1,y_2,\dots,y_{t-1}\}\)`. 
+- `\(\hat{y}_{T+h|T} =\text{E}[y_{T+h} | y_1,\dots,y_T]\)` (an `\(h\)`-step forecast taking account of all observations up to time `\(T\)`).
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+&lt;!-- explanation: fpp3 Section 2.1 Seasonal period--&gt; 
+
+- **Frequency**: number of observation per natural time interval of measurement &lt;!--(usually year, but sometimes a week, a day or an hour)--&gt;
+
+Data  |	Frequency
+------|-------------
+Annual | 	1
+Quarterly |	4
+Monthly |	12
+Weekly |	52 or 52.18
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+- Multiple frequency setting
+
+Data |	Minute |	Hour|	Day |	Week| Year
+-----|---------|------|------|------|   
+Daily	| | |	|		7	|365.25
+Hourly ||	|		24|	168 |	8766
+Half-Hourly|||			48|	336	|17532
+Minutes	||	60|	1440|	10080	|525960
+Seconds	|60|	3600|	86400	|604800|	31557600
+
+
+---
+
+.pull-left[
+
+### Monthly time series
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+- Length of the series: 72
+- Monthly seasonality
+
+]
+
+
+.pull-right[
+
+### Half-hourly Time Series
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+- Length of the series: 4032
+- Daily seasonality and weekly seasonality
+]
+---
+
+##  Time series patterns
+
+- **Trend** pattern exists when there is a long-term increase or decrease in the data.
+--
+
+- **Seasonal** pattern exists when a series is influenced by seasonal factors (e.g., the quarter of the year, the month, or day of the week).
+--
+
+- **Cyclic** pattern exists when data exhibit rises and falls that are not of fixed frequency (duration usually of at least 2 years).
+
+&lt;!-- fpp3 : Section 2.3, Check goeorge 2- tsgraphics slide 29--&gt;
+
+---
+
+## Seasonal or cyclic?
+
+Differences between seasonal and cyclic patterns:
+
+- seasonal pattern constant length; cyclic pattern variable length
+- average length of cycle longer than length of seasonal pattern
+- magnitude of cycle more variable than magnitude of seasonal pattern
+--
+
+- **The timing of peaks and troughs is predictable with seasonal data, but unpredictable in the long term with cyclic data.**
+
+---
+
+## Time series patterns
+
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+## Time series patterns
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+## Time series patterns
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## Time series patterns
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+---
+
+## Time series patterns
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+## Time series patterns
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+---
+
+**Numerical data summaries**
+
+- **Covariance** and **correlation**: measure extent of linear relationship between two variables (x and y).
+
+`$$r = \frac{\sum(x-\bar{x})(y-\bar{y})}{\sqrt{\sum(x-\bar{x})^2\sum(y-\bar{y})^2}}$$`
+- Lies between -1 and +1
+
+![](Chapter1-Lesson1_files/figure-html/cor-1.png)&lt;!-- --&gt;
+
+&lt;!--- Lies between -1 and +1--&gt;
+
+---
+## Correlation coefficient
+
+Which one has the highest correlation?
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+--
+
+- All these have `\(r=0.82\)`. 
+- Visualization is very important
+---
+## Autocorrelation
+
+**Auto**covariance `\((c_k)\)` and **auto**correlation `\((r_k)\)`: measure linear relationship between lagged values of a time series `\(y\)`.
+--
+
+- We measure the relationship between:&lt;br/&gt;
+   `\(y_t\)` and `\(y_{t-1}\)` &lt;br/&gt;
+   `\(y_t\)` and `\(y_{t-2}\)` &lt;br/&gt;
+   `\(y_t\)` and `\(y_{t-3}\)` &lt;br/&gt;
+   `\(\dots\)` &lt;br/&gt;
+   `\(y_t\)` and `\(y_{t-k}\)`
+--
+
+- We denote the sample autocovariance at lag `\(k\)` by `\(c_k\)` and the sample autocorrelation at lag `\(k\)` by `\(r_k\)`. Then
+define
+
+`$$r_k = \frac{c_k}{c_0} = \frac{\sum_{t=k+1}^{T}(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^{T}(y_t-\bar{y})^2}$$`
+---
+## Autocorrelation
+
+- `\(r_1\)` indicates how successive values of `\(y\)` relate to each other
+- `\(r_2\)` indicates how `\(y\)` values two periods apart relate to each other
+- `\(r_k\)` is almost the same as the sample correlation between `\(y_t\)` and `\(y_{t−k}\)`.
+   
+&lt;!--The Greek prefix auto- means "self. one's own, by oneself, of oneself" --&gt;
+
+---
+**Autocorrelation: Results for first 9 lags for beer data:**
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+**Autocorrelation: Results for first 9 lags for beer data:**
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+- `\(r_4\)` is **positive and higher** than for the other lags. This is due to the **seasonal pattern** in the data.
+   - the peaks (troughs) tend to be 4 quarters apart.
+   - the spikes every 4 lags after this `\((r_8, r_{12}, \dots)\)` decrease in size as the lag number increases.
+
+---
+**Autocorrelation: Results for first 9 lags for beer data:**
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+- `\(r_2\)` is **more negative** than for the other lags because troughs and peaks tend to be 2 quarters apart.
+   - The highest and the lowest productions are 2 quarters apart.
+   - The spikes every 4 lags after this `\(r_6, r_{10}, \dots\)` decrease in size as the lag number increases.
+- Together, the autocorrelations at lags `\(1, 2, \dots,\)` make up the **autocorrelation** or **ACF**.
+- The plot is known as a **correlogram**.
+- The dashed blue lines indicate whether the correlations are significantly different from zero. 
+---
+## Trend and seasonality in ACF plots
+
+- When data have a trend, the autocorrelations for small lags tend to be large and positive.
+- When data are seasonal, the autocorrelations will be larger at the seasonal lags (i.e., at multiples of the seasonal frequency)
+- When data are trended and seasonal, you see a combination of these effects
+---
+## Trend
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+---
+
+## Google stock price
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+---
+
+## Australian monthly electricity production
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+&lt;!--
+- The slow decrease in the ACF as the lags increase is due to the trend, while the "scalloped" shape is due the seasonality.--&gt;
+---
+## White noise
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+- **White noise data** is uncorrelated across time with zero mean and constant variance.
+- Technically, we require independence as well.
+&lt;!--Random Walk. A random walk is another time series model where the current observation is equal to the previous observation with a random step up or down.--&gt;
+---
+
+ **Sample autocorrelations for white noise series**
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+
+- For uncorrelated data, we would expect each one to be close to zero. 
+- Blue lines show `\(95\%\)` **critical values**.
+---
+
+## Sampling distribution of autocorrelations
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+- Sampling distribution of `\(r_k\)` for white noise data is asymptotically `\(N(0,1/T)\)`.
+- `\(95\%\)` of all `\(r_k\)` for white noise must lie within `\(\pm 1.96/ \sqrt{T}\)`.
+- If this is not the case, the series is probably not WN.
+- Common to plot lines at `\(\pm 1.96/ \sqrt{T}\)` when plotting ACF. These are the **critical values**.
+---
+
+## Sampling distribution of autocorrelations
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+Example:
+
+- `\(T = 36\)` and so critical values at
+`\(\pm 1.96/ \sqrt{36} = \pm 0.327\)`.
+- All autocorrelation coefficients lie within these limits, confirming that the data are white noise. (More precisely, the data cannot be distinguished from white noise.
+
+&lt;!-- George note 2-tsgraphics slide 60--&gt;
+
+---
+
+##Example
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+- Difficult to detect pattern in time plot.
+- ACF shows some significant autocorrelation at lags 1, 2, and 3.
+- `\(r_{12}\)` relatively large although not significant.This may indicate some slight seasonality.
+- These show the series is **not a white noise series**.
+
+---
+
+## Which is which?
+
+![](Chapter1-Lesson1_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+# References
+
+- Hyndman, R. J., &amp; Athanasopoulos, G. (2018). Forecasting: principles and practice. OTexts.
+- Mathai, A. M., &amp; Haubold, H. J. (2008). Applications to Stochastic Process and Time Series. Special Functions for Applied Scientists, 247-295.
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

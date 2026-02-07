@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MA 5124 Financial Time Series Analysis and Forecasting</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="myremark.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MA 5124 Financial Time Series Analysis and Forecasting
+]
+.subtitle[
+## Chapter 1: Introduction to Time Series &amp; Forecasting <br/> Lesson 3
+]
+.author[
+### Dr. Priyanga Talagala
+]
+.institute[
+### Department of Mathematics </br> University of Moratuwa
+]
+.date[
+### 30-06-2024
+]
+
+---
+
+
+
+
+
+
+class:inverse, middle, center
+
+# Useful tools for different forecasting situations
+
+
+---
+## A tidy forecasting workflow
+
+The process of producing forecasts can be split up into a few fundamental steps.
+
+&lt;img src="fig/15tidyworkflow.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+1. 1 Preparing data
+2. 2 Data visualisation
+3. 3 Specifying a model
+4. 4 Model estimation
+5. 5 Accuracy and performance evaluation
+6. 6 Producing forecasts
+
+
+&lt;!--
+![A tidy forecasting workflow](Chapter1-Lesson3_files/figure-html/workflow-1.png)
+--&gt;
+
+
+
+---
+class: center, middle, inverse
+# Some simple forecasting methods
+
+--
+&lt;img src="fig/16box.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Some simple forecasting methods
+
+![](Chapter1-Lesson3_files/figure-html/ausbeer-1.png)&lt;!-- --&gt;
+
+How would you forecast these series?
+---
+## Some simple forecasting methods
+
+![](Chapter1-Lesson3_files/figure-html/GDP-plot2-1.png)&lt;!-- --&gt;
+
+How would you forecast these series?
+---
+## Some simple forecasting methods
+
+![](Chapter1-Lesson3_files/figure-html/dj-1.png)&lt;!-- --&gt;
+
+How would you forecast these series?
+
+
+---
+## Some simple forecasting methods
+
+### `MEAN(y)`: Average method
+
+  * Forecasts of all future values is equal to mean of historical data `\(\{y_1,\dots,y_T\}\)`.
+  * Forecasts: `\(\hat{y}_{T+h|T} = \bar{y} = (y_1+\dots+y_T)/T\)`
+  
+`fit &lt;- bricks |&gt; model(MEAN(Bricks))`
+
+![](Chapter1-Lesson3_files/figure-html/mean-method-explained-1.png)&lt;!-- --&gt;
+
+---
+
+## Some simple forecasting methods
+
+### `NAIVE(y)`: Naïve method
+
+  * Forecasts equal to last observed value.
+  * Forecasts: `\(\hat{y}_{T+h|T} =y_T\)`.
+
+`fit &lt;- bricks |&gt; model(NAIVE(Bricks))`
+
+![](Chapter1-Lesson3_files/figure-html/naive-method-explained-1.png)&lt;!-- --&gt;
+
+---
+
+## Some simple forecasting methods
+
+### `SNAIVE(y ~ lag(m))`: Seasonal naïve method
+
+  * Forecasts equal to last value from same season.
+  * Forecasts: `\(\hat{y}_{T+h|T} =y_{T+h-m(k+1)}\)`, where `\(m=\)` seasonal period and `\(k\)` is the integer part of `\((h-1)/m\)`.
+
+`fit &lt;- bricks |&gt; model(SNAIVE(Bricks~lag("year")))`
+
+![](Chapter1-Lesson3_files/figure-html/snaive-method-explained-1.png)&lt;!-- --&gt;
+
+---
+
+## Some simple forecasting methods
+
+### `RW(y ~ drift())`: Drift method
+
+ * Forecasts equal to last value plus average change.
+ * Forecasts:
+
+
+`$$\hat{y}_{T+h|T} =  y_{T} + \frac{h}{T-1}\sum_{t=2}^T (y_t-y_{t-1})$$`
+
+`$$= y_T + \frac{h}{T-1}(y_{T} -y_1)$$`.
+
+   * Equivalent to extrapolating a line drawn between first and last observations.
+---
+## Some simple forecasting methods
+
+### Drift method
+
+`bricks |&gt; model(RW(Bricks ~ drift()))`
+
+![](Chapter1-Lesson3_files/figure-html/drift-method-explained-1.png)&lt;!-- --&gt;
+
+---
+## Model fitting
+
+The `model()` function trains models to data.
+
+
+``` r
+brick_fit &lt;-  aus_production |&gt;
+  filter(!is.na(Bricks)) |&gt;
+  model(
+    Seasonal_naive = SNAIVE(Bricks),
+    Naive = NAIVE(Bricks),
+    Drift = RW(Bricks ~ drift()),
+    Mean = MEAN(Bricks)
+  )
+
+brick_fit
+```
+
+```
+## # A mable: 1 x 4
+##   Seasonal_naive   Naive         Drift    Mean
+##          &lt;model&gt; &lt;model&gt;       &lt;model&gt; &lt;model&gt;
+## 1       &lt;SNAIVE&gt; &lt;NAIVE&gt; &lt;RW w/ drift&gt;  &lt;MEAN&gt;
+```
+
+
+A `mable` is a model table, each cell corresponds to a fitted model.
+---
+## Producing forecasts
+
+
+``` r
+brick_fc &lt;- brick_fit |&gt;
+  forecast(h = "5 years")
+
+print(brick_fc)
+```
+
+```
+## # A fable: 80 x 4 [1Q]
+## # Key:     .model [4]
+##    .model         Quarter       Bricks .mean
+##    &lt;chr&gt;            &lt;qtr&gt;       &lt;dist&gt; &lt;dbl&gt;
+##  1 Seasonal_naive 2005 Q3 N(428, 2336)   428
+##  2 Seasonal_naive 2005 Q4 N(397, 2336)   397
+##  3 Seasonal_naive 2006 Q1 N(355, 2336)   355
+##  4 Seasonal_naive 2006 Q2 N(435, 2336)   435
+##  5 Seasonal_naive 2006 Q3 N(428, 4672)   428
+##  6 Seasonal_naive 2006 Q4 N(397, 4672)   397
+##  7 Seasonal_naive 2007 Q1 N(355, 4672)   355
+##  8 Seasonal_naive 2007 Q2 N(435, 4672)   435
+##  9 Seasonal_naive 2007 Q3 N(428, 7008)   428
+## 10 Seasonal_naive 2007 Q4 N(397, 7008)   397
+## # ℹ 70 more rows
+```
+
+
+A `fable` is a forecast table with point forecasts and distributions.
+---
+## Visualising forecasts
+
+
+
+``` r
+brick_fc |&gt;
+  autoplot(aus_production, level = NULL) +
+  ggtitle("Forecasts for quarterly clay brick production") +
+  xlab("Year") + ylab("Millions of bricks") +
+  guides(colour = guide_legend(title = "Forecast"))
+```
+
+![](Chapter1-Lesson3_files/figure-html/brick-fc-plot-1.png)&lt;!-- --&gt;
+
+---
+class: center, middle, inverse
+# Residual diagnostics
+---
+## Fitted values
+
+ - `\(\hat{y}_{t|t-1}\)` is the forecast of `\(y_t\)` based on observations `\(y_1,\dots,y_{t-1}\)`.
+ - We call these "fitted values".
+ - Sometimes drop the subscript: `\(\hat{y}_t \equiv \hat{y}_{t|t-1}\)`.
+
+
+### For example:
+
+ - `\(\hat{y}_{t} = \bar{y}\)` for average method.
+ - `\(\hat{y}_{t} = y_{t-1} + (y_{T}-y_1)/(T-1)\)` for drift method.
+---
+## Forecasting residuals
+
+**Residuals in forecasting:** difference between observed value and its fitted value: `\(e_t = y_t-\hat{y}_{t|t-1}\)`.
+
+### Assumptions
+
+  1. 1 `\(\{e_t\}\)` uncorrelated. If they aren't, then information left in  residuals that should be used in computing forecasts.
+  2. 2 `\(\{e_t\}\)` have mean zero. If they don't, then forecasts are biased.
+
+### Useful properties (for distributions and prediction intervals)
+
+  3. 3 `\(\{e_t\}\)` have constant variance.
+  4. 4 `\(\{e_t\}\)` are normally distributed.
+
+
+---
+## Facebook closing stock price
+
+
+``` r
+fb_stock &lt;- gafa_stock |&gt;
+  filter(Symbol == "FB") |&gt;
+  mutate(trading_day = row_number()) |&gt;
+  update_tsibble(index = trading_day, regular = TRUE)
+fb_stock |&gt; autoplot(Close)
+```
+
+![](Chapter1-Lesson3_files/figure-html/fbf-1.png)&lt;!-- --&gt;
+---
+## Facebook closing stock price
+
+
+``` r
+fit &lt;- fb_stock |&gt; model(NAIVE(Close))
+fit 
+```
+
+```
+# A mable: 1 x 2
+# Key:     Symbol [1]
+  Symbol `NAIVE(Close)`
+  &lt;chr&gt;         &lt;model&gt;
+1 FB            &lt;NAIVE&gt;
+```
+
+``` r
+augment(fit)
+```
+
+```
+# A tsibble: 1,258 x 7 [1]
+# Key:       Symbol, .model [1]
+   Symbol .model       trading_day Close .fitted .resid .innov
+   &lt;chr&gt;  &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 FB     NAIVE(Close)           1  54.7    NA   NA     NA    
+ 2 FB     NAIVE(Close)           2  54.6    54.7 -0.150 -0.150
+ 3 FB     NAIVE(Close)           3  57.2    54.6  2.64   2.64 
+ 4 FB     NAIVE(Close)           4  57.9    57.2  0.720  0.720
+ 5 FB     NAIVE(Close)           5  58.2    57.9  0.310  0.310
+ 6 FB     NAIVE(Close)           6  57.2    58.2 -1.01  -1.01 
+ 7 FB     NAIVE(Close)           7  57.9    57.2  0.720  0.720
+ 8 FB     NAIVE(Close)           8  55.9    57.9 -2.03  -2.03 
+ 9 FB     NAIVE(Close)           9  57.7    55.9  1.83   1.83 
+10 FB     NAIVE(Close)          10  57.6    57.7 -0.140 -0.140
+# ℹ 1,248 more rows
+```
+
+&lt;!-- explain refer rob's slides"--&gt;
+
+---
+## Facebook closing stock price
+
+
+``` r
+augment(fit) |&gt;
+  ggplot(aes(x = trading_day)) +
+  geom_line(aes(y = Close, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted"))
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj4-1.png)&lt;!-- --&gt;
+
+&lt;!--1149 jump, 2018-07-26 --&gt;
+
+
+---
+## Facebook closing stock price
+
+
+``` r
+augment(fit) |&gt;
+  filter(trading_day &gt; 1100) |&gt;
+  ggplot(aes(x = trading_day)) +
+  geom_line(aes(y = Close, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted"))
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj4a-1.png)&lt;!-- --&gt;
+
+---
+
+## Facebook closing stock price
+
+
+``` r
+augment(fit) |&gt;
+  autoplot(.resid) + xlab("Day") + ylab("") +
+  ggtitle("Residuals from naïve method")
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj5-1.png)&lt;!-- --&gt;
+---
+
+## Facebook closing stock price
+
+
+``` r
+augment(fit) |&gt;
+  ggplot(aes(x = .resid)) +
+  geom_histogram(bins = 150) +
+  ggtitle("Histogram of residuals")
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj6-1.png)&lt;!-- --&gt;
+---
+## Facebook closing stock price
+
+
+``` r
+augment(fit) |&gt;
+  ACF(.resid) |&gt;
+  autoplot() + ggtitle("ACF of residuals")
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj7-1.png)&lt;!-- --&gt;
+
+---
+## ACF of residuals
+
+  * We assume that the residuals are white noise (uncorrelated, mean zero, constant variance). If they aren't, then there is information left in  the residuals that should be used in computing forecasts.
+  * So a standard residual diagnostic is to check the ACF of the residuals of a forecasting method.
+  * We *expect* these to look like white noise.
+
+---
+
+## `gg_tsresiduals` function
+
+
+```r
+gg_tsresiduals(fit)
+```
+
+![](Chapter1-Lesson3_files/figure-html/dj10-1.png)&lt;!-- --&gt;
+
+---
+## Portmanteau tests
+
+Consider a *whole set* of `\(r_{k}\)`  values, and develop a test to see whether the set is significantly different from a zero set.
+
+**Box-Pierce test**
+
+`$$Q = T \sum_{k=1}^h r_k^2$$`
+where `\(h\)`  is max lag being considered and `\(T\)` is number of observations.
+
+  * If each `\(r_k\)` close to zero, `\(Q\)` will be **small**.
+  * If some `\(r_k\)` values large (positive or negative), `\(Q\)` will be **large**.
+
+---
+## Portmanteau tests
+
+Consider a *whole set* of `\(r_{k}\)`  values, and develop a test to see whether the set is significantly different from a zero set.
+
+**Ljung-Box test**
+
+`$$Q^* = T(T+2) \sum_{k=1}^h (T-k)^{-1}r_k^2$$`
+where `\(h\)`  is max lag being considered and `\(T\)` is number of observations.
+
+  * My preferences: `\(h=10\)` for non-seasonal data, `\(h=2m\)` for seasonal data.
+  * Better performance, especially in small samples.
+---
+## Portmanteau tests
+
+  * If data are WN, `\(Q^*\)` has `\(\chi^2\)` distribution with  `\((h - K)\)` degrees of freedom where `\(K=\)` no. parameters in model.
+  * When applied to raw data, set `\(K=0\)`.
+
+
+``` r
+augment(fit) |&gt;
+  features(.resid, ljung_box, lag=10, dof=0)
+```
+
+```
+## # A tibble: 1 × 4
+##   Symbol .model       lb_stat lb_pvalue
+##   &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 FB     NAIVE(Close)    12.1     0.276
+```
+
+---
+
+class: inverse, middle, center
+# Distributional forecasts and prediction intervals
+
+---
+
+## Forecast distributions
+
+ * A forecast `\(\hat{y}_{T+h|T}\)` is (usually) the mean of the conditional distribution `\(y_{T+h} \mid y_1, \dots, y_{T}\)`.
+ * Most time series models produce normally distributed forecasts.
+ * The forecast distribution describes the probability of observing any future value.
+
+
+---
+
+## Forecast distributions
+
+Assuming residuals are normal, uncorrelated, sd = `\(\hat\sigma\)`:
+
+
+
+- **Mean:** `\(\hat{y}_{T+h|T} \sim N(\bar{y}, (1 + 1/T)\hat{\sigma}^2)\)`
+- **Naïve:**  `\(\hat{y}_{T+h|T} \sim N(y_T, h\hat{\sigma}^2)\)`
+- **Seasonal naïve**  `\(\hat{y}_{T+h|T} \sim N(y_{T+h-m(k+1)}, (k+1)\hat{\sigma}^2)\)`
+- **Drift:**  `\(\hat{y}_{T+h|T} \sim N(y_T + \frac{h}{T-1}(y_T - y_1),h\frac{T+h}{T}\hat{\sigma}^2)\)`
+
+where `\(k\)` is the integer part of `\((h-1)/m\)`.
+
+Note that when `\(h=1\)` and `\(T\)` is large, these all give the same approximate forecast variance: `\(\hat{\sigma}^2\)`.
+
+---
+## Prediction intervals
+
+ * A prediction interval gives a region within which we expect `\(y_{T+h}\)` to lie with a specified probability.
+ * Assuming forecast errors are normally distributed, then a 95% PI is
+`$$\hat{y}_{T+h|T}\pm1.96\hat\sigma_h$$`
+
+where `\(\hat\sigma_h\)` is the st dev of the `\(h\)`-step distribution.
+
+ * When `\(h=1\)`, `\(\hat\sigma_h\)` can be estimated from the residuals.
+ 
+---
+
+## Prediction intervals
+
+
+``` r
+brick_fc |&gt; hilo(level = 95)
+```
+
+```
+## # A tsibble: 80 x 5 [1Q]
+## # Key:       .model [4]
+##    .model         Quarter       Bricks .mean                  `95%`
+##    &lt;chr&gt;            &lt;qtr&gt;       &lt;dist&gt; &lt;dbl&gt;                 &lt;hilo&gt;
+##  1 Seasonal_naive 2005 Q3 N(428, 2336)   428 [333.2737, 522.7263]95
+##  2 Seasonal_naive 2005 Q4 N(397, 2336)   397 [302.2737, 491.7263]95
+##  3 Seasonal_naive 2006 Q1 N(355, 2336)   355 [260.2737, 449.7263]95
+##  4 Seasonal_naive 2006 Q2 N(435, 2336)   435 [340.2737, 529.7263]95
+##  5 Seasonal_naive 2006 Q3 N(428, 4672)   428 [294.0368, 561.9632]95
+##  6 Seasonal_naive 2006 Q4 N(397, 4672)   397 [263.0368, 530.9632]95
+##  7 Seasonal_naive 2007 Q1 N(355, 4672)   355 [221.0368, 488.9632]95
+##  8 Seasonal_naive 2007 Q2 N(435, 4672)   435 [301.0368, 568.9632]95
+##  9 Seasonal_naive 2007 Q3 N(428, 7008)   428 [263.9292, 592.0708]95
+## 10 Seasonal_naive 2007 Q4 N(397, 7008)   397 [232.9292, 561.0708]95
+## # ℹ 70 more rows
+```
+
+---
+
+
+``` r
+bricks |&gt;
+  filter(!is.na(Bricks)) |&gt;
+  model(
+    Seasonal_naive = SNAIVE(Bricks),
+    Naive = NAIVE(Bricks),
+    Drift = RW(Bricks ~ drift()),
+    Mean = MEAN(Bricks)
+  ) |&gt;
+  forecast(h = 10) |&gt; autoplot(bricks) 
+```
+
+![](Chapter1-Lesson3_files/figure-html/foreplot-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Prediction intervals
+
+ * Point forecasts are often useless without a measure of uncertainty (such as prediction intervals).
+ * Prediction intervals require a stochastic model (with random errors, etc).
+ * Multi-step forecasts for time series require a more sophisticated approach (with PI getting wider as the forecast horizon increases).
+---
+
+## Prediction intervals
+
+  * Computed automatically from the forecast distribution.
+  * Use `level` argument to control coverage.
+  * Check residual assumptions before believing them (we will see this next class).
+  * Usually too narrow due to unaccounted uncertainty.
+  
+&lt;!--https://robjhyndman.com/hyndsight/narrow-pi/--&gt;
+---
+class: inverse, middle, center
+# Forecasting and decomposition
+
+---
+  
+## Forecasting and decomposition
+  
+- Forecast seasonal component by repeating the last year
+- Forecast seasonally adjusted data using non-seasonal time series method.
+- Combine forecasts of seasonal component with forecasts of seasonally adjusted data to get forecasts of original data.
+- Sometimes a decomposition is useful just for understanding the data before building a separate forecasting model.
+---
+  
+## US Retail Employment
+  
+
+``` r
+us_retail_employment &lt;- us_employment |&gt;
+  filter(year(Month) &gt;= 1990, Title == "Retail Trade") |&gt;
+  select(-Series_ID)
+us_retail_employment
+```
+
+```
+## # A tsibble: 357 x 3 [1M]
+##       Month Title        Employed
+##       &lt;mth&gt; &lt;chr&gt;           &lt;dbl&gt;
+##  1 1990 Jan Retail Trade   13256.
+##  2 1990 Feb Retail Trade   12966.
+##  3 1990 Mar Retail Trade   12938.
+##  4 1990 Apr Retail Trade   13012.
+##  5 1990 May Retail Trade   13108.
+##  6 1990 Jun Retail Trade   13183.
+##  7 1990 Jul Retail Trade   13170.
+##  8 1990 Aug Retail Trade   13160.
+##  9 1990 Sep Retail Trade   13113.
+## 10 1990 Oct Retail Trade   13185.
+## # ℹ 347 more rows
+```
+
+---
+  
+## US Retail Employment
+  
+
+``` r
+dcmp &lt;- us_retail_employment |&gt;
+  model(STL(Employed)) |&gt;
+  components() |&gt; 
+  select(-.model)
+dcmp
+```
+
+```
+## # A tsibble: 357 x 6 [1M]
+##       Month Employed  trend season_year remainder season_adjust
+##       &lt;mth&gt;    &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+##  1 1990 Jan   13256. 13288.      -33.0      0.836        13289.
+##  2 1990 Feb   12966. 13269.     -258.     -44.6          13224.
+##  3 1990 Mar   12938. 13250.     -290.     -22.1          13228.
+##  4 1990 Apr   13012. 13231.     -220.       1.05         13232.
+##  5 1990 May   13108. 13211.     -114.      11.3          13223.
+##  6 1990 Jun   13183. 13192.      -24.3     15.5          13207.
+##  7 1990 Jul   13170. 13172.      -23.2     21.6          13193.
+##  8 1990 Aug   13160. 13151.       -9.52    17.8          13169.
+##  9 1990 Sep   13113. 13131.      -39.5     22.0          13153.
+## 10 1990 Oct   13185. 13110.       61.6     13.2          13124.
+## # ℹ 347 more rows
+```
+
+---
+  
+## US Retail Employment
+
+
+
+``` r
+dcmp |&gt;
+  model(NAIVE(season_adjust)) |&gt;
+  forecast() |&gt;
+  autoplot(dcmp) +
+  ggtitle("Naive forecasts of seasonally adjusted data")
+```
+
+![](Chapter1-Lesson3_files/figure-html/usretail2-1.png)&lt;!-- --&gt;
+
+---
+  
+## US Retail Employment
+  
+
+``` r
+fit_dcmp &lt;- us_retail_employment |&gt;
+  model(stlf = decomposition_model(
+    STL(Employed ~ trend(window = 7), robust = TRUE),
+    NAIVE(season_adjust)
+  )) 
+
+fit_dcmp |&gt; forecast() |&gt;
+  autoplot(us_retail_employment)
+```
+
+![](Chapter1-Lesson3_files/figure-html/usretail3-1.png)&lt;!-- --&gt;
+
+---
+  
+## Decomposition models
+  
+`decomposition_model()` creates a decomposition model
+
+* You must provide a method for forecasting the `season_adjust` series.
+* A seasonal naive method is used by default for the `seasonal` components.
+* The variances from both the seasonally adjusted and seasonal forecasts are combined.
+---
+
+
+``` r
+fit_dcmp |&gt; gg_tsresiduals()
+```
+
+![](Chapter1-Lesson3_files/figure-html/res-1.png)&lt;!-- --&gt;
+
+---
+class: center, inverse, middle
+# Evaluating forecast accuracy
+---
+  
+## Training and test sets
+  
+![](Chapter1-Lesson3_files/figure-html/traintest-1.png)&lt;!-- --&gt;
+
+-   A model which fits the training data well will not necessarily forecast well.
+-   A perfect fit can always be obtained by using a model with enough parameters.
+-   Over-fitting a model to data is just as bad as failing to identify a systematic pattern in the data.
+- The test set must not be used for *any* aspect of model development or calculation of forecasts.
+- Forecast accuracy is based only on the test set.
+
+--- 
+
+---
+
+## Forecast errors
+  
+Forecast "error": the difference between an observed value and its forecast.
+
+`$$e_{T+h}=y_{T+h}-\hat{y}_{T+h|T},$$` 
+where the training data is given by `\(\{y_1,\dots,y_T\}\)`
+  
+  - Unlike residuals, forecast errors on the test set involve multi-step forecasts.
+  - These are *true* forecast errors as the test data is not used in computing `\(\hat{y}_{T+h|T}\)`.
+
+---
+  
+## Measures of forecast accuracy
+  
+![](Chapter1-Lesson3_files/figure-html/beer-fc-1-1.png)&lt;!-- --&gt;
+
+---
+
+## Measures of forecast accuracy
+  
+`$$y_{T+h}= (T+h)\text{th observation, } h=1,\dots,H$$` 
+  
+`$$\hat{y}_{T+h|T}= \text{ its forecast based on data up to time } T.$$`
+`$$e_{T+h} = y_{T+h} -\hat{y}_{T+h|T}$$`
+  
+`$$\text{MAE} = \text{mean}(|e_{T+h}|)$$`
+
+`$$\text{MSE} = \text{mean}(e_{T+h}^2)$$`
+  
+`$$\text{RMSE} = \sqrt{\text{mean}(e_{T+h}^2)}$$`
+
+`$$\text{MAPE} = 100\text{mean}(|e_{T+h}|/ |y_{T+h}|)$$`
+  
+* MAE, MSE, RMSE are all scale dependent.
+* MAPE is scale independent but is only sensible if `\(y_t\gg 0\)` for all `\(t\)`, and `\(y\)` has a natural zero.
+
+---
+## Measures of forecast accuracy
+  
+**Mean Absolute Scaled Error**
+  
+`$$\text{MASE} = \text{mean}(|e_{T+h}|/Q)$$`
+  where `\(Q\)` is a stable measure of the scale of the time series `\(\{y_t\}\)`.
+
+Proposed by Hyndman and Koehler (IJF, 2006).
+
+For non-seasonal time series,
+`$$Q = \frac{1}{T-1}\sum_{t=2}^T |y_t-y_{t-1}|$$`
+  works well. Then MASE is equivalent to MAE relative to a naïve method.
+---
+## Measures of forecast accuracy
+  
+**Mean Absolute Scaled Error**
+  
+`$$\text{MASE} = \text{mean}(|e_{T+h}|/Q)$$`
+where `\(Q\)` is a stable measure of the scale of the time series `\(\{y_t\}\)`.
+
+
+Proposed by Hyndman and Koehler (IJF, 2006).
+
+For seasonal time series,
+`$$Q = \frac{1}{T-m }\sum_{t=m+1}^T |y_t-y_{t-m}|$$` 
+works well. Then MASE is equivalent to MAE relative to a seasonal naïve method.
+---
+
+## Measures of forecast accuracy
+  
+![](Chapter1-Lesson3_files/figure-html/beer-fc-2-1.png)&lt;!-- --&gt;
+---
+  
+## Measures of forecast accuracy
+
+
+``` r
+recent_production &lt;- aus_production |&gt;
+  filter(year(Quarter) &gt;= 1992)
+train &lt;- recent_production |&gt;
+  filter(year(Quarter) &lt;= 2007)
+beer_fit &lt;- train |&gt;
+  model(
+    Mean = MEAN(Beer),
+    Naive = NAIVE(Beer),
+    Seasonal_naive = SNAIVE(Beer),
+    Drift = RW(Beer ~ drift())
+  )
+beer_fc &lt;- beer_fit |&gt;
+  forecast(h = 10)
+```
+---
+## Measures of forecast accuracy
+  
+
+```r
+accuracy(beer_fit)
+```
+
+
+```
+## # A tibble: 4 × 6
+##   .model         .type     RMSE   MAE  MAPE  MASE
+##   &lt;chr&gt;          &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Drift          Training  65.3  54.8 12.2   3.83
+## 2 Mean           Training  43.6  35.2  7.89  2.46
+## 3 Naive          Training  65.3  54.7 12.2   3.83
+## 4 Seasonal_naive Training  16.8  14.3  3.31  1
+```
+
+
+```r
+accuracy(beer_fc, recent_production)
+```
+
+
+```
+## # A tibble: 4 × 6
+##   .model         .type  RMSE   MAE  MAPE  MASE
+##   &lt;chr&gt;          &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Drift          Test   64.9  58.9 14.6  4.12 
+## 2 Mean           Test   38.4  34.8  8.28 2.44 
+## 3 Naive          Test   62.7  57.4 14.2  4.01 
+## 4 Seasonal_naive Test   14.3  13.4  3.17 0.937
+```
+
+---
+  
+  
+## Poll: true or false?
+  
+1. 1 Good forecast methods should have normally distributed residuals.
+2. 2  A model with small residuals will give good forecasts.
+3. 3 The best measure of forecast accuracy is MAPE.
+4. 4 If your model doesn't forecast well, you should make it more complicated.
+5. 5 Always choose the model with the best forecast accuracy as measured on the test set.
+---
+class: inverse, middle, center
+# Time series cross-validation
+
+---
+## Time series cross-validation
+
+**Traditional evaluation**
+
+![](Chapter1-Lesson3_files/figure-html/traintest3-1.png)&lt;!-- --&gt;
+
+**Time series cross-validation**
+
+![](Chapter1-Lesson3_files/figure-html/cv1-1.png)&lt;!-- --&gt;
+
+* Forecast accuracy averaged over test sets.
+* Also known as "evaluation on a rolling forecasting origin"
+---
+
+## Creating the rolling training sets 
+
+There are three main rolling types which can be used.
+
+* Stretch: extends a growing length window with new data.
+* Slide: shifts a fixed length window through the data.
+* Tile: moves a fixed length window without overlap.
+
+Three functions to roll a tsibble: `stretch_tsibble()`, `slide_tsibble()`,
+and `tile_tsibble()`.
+
+For time series cross-validation, stretching windows are most commonly used.
+
+A good way to choose the best forecasting model is to find the model with the smallest RMSE computed using time series cross-validation.
+
+---
+## Time series cross-validation 
+
+Stretch with a minimum length of 3, growing by 1 each step.
+
+
+
+
+
+
+``` r
+fb_stretch &lt;- fb_stock |&gt;
+  stretch_tsibble(.init = 3, .step = 1) |&gt;
+  filter(.id != max(.id))
+```
+
+
+```
+## # A tsibble: 790,650 x 4 [1]
+## # Key:       .id [1,255]
+##    Date       Close trading_day   .id
+##    &lt;date&gt;     &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+##  1 2014-01-02  54.7           1     1
+##  2 2014-01-03  54.6           2     1
+##  3 2014-01-06  57.2           3     1
+##  4 2014-01-02  54.7           1     2
+##  5 2014-01-03  54.6           2     2
+##  6 2014-01-06  57.2           3     2
+##  7 2014-01-07  57.9           4     2
+##  8 2014-01-02  54.7           1     3
+##  9 2014-01-03  54.6           2     3
+## 10 2014-01-06  57.2           3     3
+## 11 2014-01-07  57.9           4     3
+## 12 2014-01-08  58.2           5     3
+## 13 2014-01-02  54.7           1     4
+## 14 2014-01-03  54.6           2     4
+## 15 2014-01-06  57.2           3     4
+## # ℹ 790,635 more rows
+```
+---
+
+## Time series cross-validation 
+
+Estimate RW w/ drift models for each window.
+
+
+``` r
+fit_cv &lt;- fb_stretch |&gt;
+  model(RW(Close ~ drift()))
+```
+
+
+```
+## # A mable: 1,255 x 3
+## # Key:     .id, Symbol [1,255]
+##     .id Symbol `RW(Close ~ drift())`
+##   &lt;int&gt; &lt;chr&gt;                &lt;model&gt;
+## 1     1 FB             &lt;RW w/ drift&gt;
+## 2     2 FB             &lt;RW w/ drift&gt;
+## 3     3 FB             &lt;RW w/ drift&gt;
+## 4     4 FB             &lt;RW w/ drift&gt;
+## # … with 1,251 more rows
+```
+---
+
+## Time series cross-validation 
+
+Produce one step ahead forecasts from all models.
+
+
+``` r
+fc_cv &lt;- fit_cv |&gt;
+  forecast(h=1)
+```
+
+
+```
+## # A fable: 1,255 x 5 [1]
+## # Key:     .id, Symbol [1,255]
+##     .id Symbol trading_day      Close .mean
+##   &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;     &lt;dist&gt; &lt;dbl&gt;
+## 1     1 FB               4 N(58, 5.8)  58.4
+## 2     2 FB               5 N(59, 2.7)  59.0
+## 3     3 FB               6 N(59, 1.9)  59.1
+## 4     4 FB               7 N(58, 2.2)  57.7
+## # ℹ 1,251 more rows
+```
+---
+
+## Time series cross-validation 
+
+
+``` r
+# Time series cross-validation accuracy
+fc_cv |&gt; accuracy(fb_stock)
+# Training set (Residual accuracy)
+fb_stock |&gt; model(RW(Close ~ drift())) |&gt; accuracy()
+```
+
+
+   | RMSE  | MAE | MAPE
+---|-------|-----|-----
+Cross=validation | 2.418 | 1.469 | 1.266
+Training | 2.414 | 1.465 | 1.261
+
+
+---
+# References
+
+- Hyndman, R. J., &amp; Athanasopoulos, G. (2018). Forecasting: principles and practice. OTexts.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

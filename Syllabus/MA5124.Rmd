@@ -1,0 +1,62 @@
+---
+output: pdf_document
+header-includes:
+- \usepackage{multirow}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+#- \fancyhead[CO,CE]{This is fancy header}
+- \fancyfoot[CO,CE]{Prepared by Dr. Priyanga D. Talagala  (Copyright 2026 P. D. Talagala)}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\begin{table}[!h]
+\begin{tabular}{|p{1.2cm}|p{1.5cm}|p{3cm}|p{3cm}|p{0.6cm}|p{2.3cm}|p{2cm}|}
+\hline
+\textbf{Module Code} & MA 5124   & \textbf{Module Title} & \multicolumn{4}{l|}{Financial Time Series Analysis and Forecasting} \\ \hline
+
+\multirow{2}{*}{\textbf{Credit}} & \multirow{2}{*}{4} &\textbf{Total allocated Hours / Week} & \textbf{Lectures/ Lab/ Tutorials} & 3 & \multirow{2}{*}{\textbf{Pre-requisites}} & \multirow{2}{*}{None} \\  \hline
+
+\multicolumn{7}{|p{16.5cm}|}{\textbf{Time}: Sunday 4.00 pm - 7.00 pm}\\ \hline
+
+\multicolumn{7}{|l|}{\multirow{1}{*}{\textbf{Module Aim}}} \\ 
+\multicolumn{7}{|p{16.5cm}|}{To provide students with in-depth understanding of essential tools and techniques for time series analysis and forecasting and thereby solve time series and forecasting challenges in different application domains.} \\ \hline
+
+\multicolumn{7}{|p{16.5cm}|}{\textbf{Learning Outcomes (LO)}}\\ 
+
+\multicolumn{7}{|p{16.5cm}|}{At the completion of this module, students should be able to;}\\ 
+\multicolumn{7}{|p{16.5cm}|}{LO-1: Apply visualization techniques to explore time series data and analyse the validity of the models.  } \\
+\multicolumn{7}{|p{16.5cm}|}{LO-2: Formulate time series models mathematically. } \\
+\multicolumn{7}{|p{16.5cm}|}{LO-3: Critically review and evaluate time series models and choose the best modelling approach for problem solution.} \\ 
+\multicolumn{7}{|p{16.5cm}|}{LO-4: Produce and  interpret computer outputs for time series specific applications.} \\
+\multicolumn{7}{|p{16.5cm}|}{LO-5: Document and articulate the results and conclusions for time series analysis and modelling techniques applied to real world problems in different application fields. } \\ \hline
+\multicolumn{5}{|l|}{\textbf{Content Outline}}  & \multicolumn{2}{p{2cm}|}{\textbf{Relevant  Learning Outcomes}} \\ \hline
+
+1 & \multicolumn{4}{p{10cm}|}{\textbf{Introduction to time series and forecasting}} & \multicolumn{2}{p{3cm}|}{LO1, LO4 LO5}  \\
+2 & \multicolumn{4}{p{10cm}|}{\textbf{ARIMA models}} & \multicolumn{2}{p{4cm}|}{LO2, LO3, LO4, LO5}  \\
+3 & \multicolumn{4}{p{10cm}|}{\textbf{Volatility Models}} & \multicolumn{2}{p{4cm}|}{LO2, LO3, LO4, LO5}  \\
+4 & \multicolumn{4}{p{10cm}|}{\textbf{Multivariate Time Series Modelling}} & \multicolumn{2}{p{4cm}|}{LO2, LO3, LO4, LO5}  \\\hline
+\multicolumn{3}{|l|}{\textbf{Assessments}} & \multicolumn{4}{l|}{\textbf{Weightage (\%) \textit{(Subject to change)}}}\\ \hline
+
+\multicolumn{3}{|l|}{\textbf{Continuous Assessments}} & \multicolumn{4}{l|}{30 \%} \\ \hline
+\multicolumn{3}{|l|}{\textbf{End Semester Examination}} & \multicolumn{4}{l|}{70 \%} \\ \hline
+
+
+\multicolumn{7}{|l|}{\textbf{Recommended Texts:}} \\ 
+\multicolumn{7}{|p{17cm}|}{1.	 Hyndman, R.J. \& Athanasopoulos, G. (2020) Forecasting: principles and practice, 3rd edition.}  \\ 
+\multicolumn{7}{|p{17cm}|}{2.	Chatfield, C. \& Xing, H. (2019) The analysis of time series: an introduction with R. CRC press.}  \\ 
+\multicolumn{7}{|p{17cm}|}{3. Tsay, R. S. (2010). Analysis of Financial Time Series. John Wiley \& Sons.}  \\ 
+\multicolumn{7}{|p{17cm}|}{4.	Tsay, R. S. (2013). Multivariate time series analysis: with R and financial applications. John Wiley \& Sons.}  \\ \hline
+
+
+\multicolumn{7}{|l|}{\textbf{Remarks:}} \\ 
+\multicolumn{7}{|p{17cm}|}{\textbf{Course structure:} \textit{The course form is a hybrid of lectures, tutorial and computer lab sessions. }} \\ 
+\multicolumn{7}{|p{17cm}|}{\textbf{Lab Sessions:} \textit{The free and open source R programming language will be used extensively throughout the course to teach fundamental programming concepts and applied statistical approaches. Introductory R Sessions will be conducted to aid in retention and understanding of the topics covered.}} \\ 
+
+\multicolumn{7}{|p{17cm}|}{\textbf{Disability Support Services} \textit{Students who have a disability, ongoing medical or health condition should provide confirmation of their requirement for alternative arrangements to the chief examiner, academic advisor or appropriate faculty contact person responsible for administering the arrangements no later than two weeks before starting the academic semester or two weeks before the assessment activities.}} \\ 
+
+\multicolumn{7}{|l|}{} \\ \hline
+\end{tabular}
+\end{table}

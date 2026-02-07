@@ -1,0 +1,153 @@
+---
+title: "MA 5124 <br/> Financial Time Series Analysis & Forecasting"
+subtitle: "Subject information"
+author: "Dr. Priyanga Talagala"
+institute: "Department of Computational Mathematics </br> University of Moratuwa"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    css: ["default", "myremark.css", "xaringan-themer.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+header-includes: 
+- \usepackage{ulem}
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(kableExtra)
+```
+
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#081d58",
+  title_slide_text_color = "#edf8b1",
+  secondary_color = "#00ccff",
+  inverse_header_color = "#081d58",
+  text_font_size = "1em",
+  text_color = "#000",
+  text_bold_color = "#fd8d3c",
+
+  
+)
+
+```
+
+class: center, middle, inverse
+
+
+
+## Welcome to MA 5124 Financial Time Series Analysis & Forecasting!!!
+--
+
+
+## Senior Lecturer 
+Dr. Priyanga D. Talagala
+
+PhD in Statistics, 
+Monash University, Australia
+
+Email: priyangad@uom.lk <br/>
+
+Web: prital.netlify.app
+
+--
+
+My research focuses on statistical machine learning, data mining and time series and forecasting
+
+---
+class: inverse, middle, center
+
+# Course Outline Syllabus
+
+
+---
+## Teaching and learning approach
+
+  * One 90 minutes lecture
+  * One 90 minute computer lab session  
+
+each week for 15 weeks.
+
+- Online lectures via Zoom
+
+---
+
+## R and R studio
+
+- Statistical software R will be used throughout this course.  
+- R provides many ways to query, explore, and visualize data, make models from data, and perform statistical tests.
+
+```{r   out.width = "50%", echo = FALSE, fig.cap='', fig.align='center'}
+knitr::include_graphics("fig/Rstudio-Ball.png")
+```
+
+<!--- You don’t need to have any previous knowledge of this tools that will be used in this course.-->
+---
+
+class: middle
+## Pre-requisites 
+
+- MA5120 Introduction to Statistics
+- You don’t need to have any previous knowledge of the statistical software tools that will be used in this course
+---
+class:  inverse, middle
+## Key references
+
+
+Hyndman, R.J.& Athanasopoulos, G. (2020) ***Forecasting: principles and practice***, 3rd edition [OTexts.org/fpp3/](https://otexts.com/fpp3/)
+
+  * Free and online
+  * Data sets in associated R packages
+  * R code for examples
+
+```{r   out.width = "60%", echo = FALSE, fig.cap='', fig.align='center'}
+knitr::include_graphics("fig/fpp3author.png")
+```
+---
+class:  inverse, middle
+## Key references
+
+Chatfield, C., & Xing, H. (2019). The analysis of time series: an introduction with R. CRC press.
+
+```{r   out.width = "30%", echo = FALSE, fig.cap='', fig.align='center'}
+knitr::include_graphics("fig/textbook2.jpg")
+```
+ 
+---
+class: middle
+##  Assessment (Tentative plan)
+
+Task | Value
+---------|------------
+Assignment 1 |  20%
+Assignment 2 |  10%
+End-semester examination   |  70%
+
+---
+class: middle
+## Moodle site
+
+- Includes all lecture notes, handouts, assignments
+- Assignment submissions
+- Forum for asking questions, etc.
+- Announcements 
+
+
+<!--
+
+<span style="color: red;">
+**Please don’t send emails. Use the forum.**
+</span>
+-->
+
+
+
+
