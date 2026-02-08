@@ -88,9 +88,9 @@ ID   | Monthly Income (in LKR)
 3    | 40000
 4    | 65000
 ---
-background-image:url('fig/7_uselection.png')
+background-image:url('fig/7_animal.png')
 background-position: 50% 50%
-background-size: 70%
+background-size: 100%
 class: right, top
 
 ---
@@ -108,21 +108,22 @@ class: right, top
   - Annual Google profits
   - Monthly rainfall
   - Weekly retail sales
-  - Daily confirmed COVID-19 cases and deaths
+  - Daily confirmed dengue cases and deaths
   - Hourly electricity demand
 
 ---
-background-image:url('fig/8_coronavirus-data-explorer.png')
+background-image:url('fig/8_dengue.png')
+background-position: 50% 50%
+background-size: 60%
+class: left, top
+### District-wise weekly Dengue cases from 2006 to 2025
+---
+background-image:url('fig/8_exchangerate.png')
 background-position: 50% 50%
 background-size: 70%
 class: right, top
 ---
 
-background-image:url('fig/8_daily-covid-cases-deaths.png')
-background-position: 50% 50%
-background-size: 70%
-class: right, top
----
 ## 3. Pooled data
 
 - Pooled data occur when we have a “time series of cross sections,” but the observations in each cross section do not necessarily refer to the same unit.
