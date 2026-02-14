@@ -2,7 +2,7 @@
 title: "MA 5124 Financial Time Series Analysis and Forecasting"
 subtitle: "Chapter 1: Introduction to time series and forecasting <br/> Lesson 2"
 author: "Dr. Priyanga Talagala"
-date: "30-06-2024"
+date: "15-02-2026"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -48,17 +48,18 @@ library(tidyverse)
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
 style_duo_accent(
-  primary_color = "#081d58",
-  title_slide_text_color = "#edf8b1",
-  secondary_color = "#43a383",
+  primary_color = "#ffffff",
+  title_slide_text_color = "#081d58", 
+  secondary_color = "#ffffff",
   inverse_header_color = "#081d58",
   text_font_size = "1.1em",
   text_color = "#000",
   text_bold_color = "#fd8d3c",
+  link_color = "#1f78b4",
+  header_color = "#081d58"
 
   
 )
-
 ```
 
 class: center, middle, inverse
@@ -465,12 +466,6 @@ where $k = (m âˆ’ 1)/2$ is the half-width and the weights are denoted by $[a_{âˆ
 - Weighted MA are smoother.
 ---
 
-```{r   echo=FALSE, out.width = "70%", fig.align='center'}
-knitr::include_graphics("fig/MA_covid.png")
-```
-
-https://coronavirus.jhu.edu/data/new-cases
----
 ## Trend-cycle
 
 - Multiplicative decomposition: $y_t = T_t\times S_t \times R_t = \hat{T}_t \times \hat{S}_t \times \hat{R}_t$
@@ -496,17 +491,7 @@ https://coronavirus.jhu.edu/data/new-cases
 - Not robust to outliers.
 - Newer methods designed to overcome these problems.
 ---
-class: center, middle, inverse
-# History of time series decomposition
----
-## History of time series decomposition
 
-  *  Classical method originated in 1920s.
-  *  Census II method introduced in 1957. Basis for X-11 method and variants (including X-12-ARIMA, X-13-ARIMA)
-  *  STL method introduced in 1983
-  *  TRAMO/SEATS introduced in 1990s.
-
----
 ## STL decomposition
 
   *  STL: "Seasonal and Trend decomposition using Loess"

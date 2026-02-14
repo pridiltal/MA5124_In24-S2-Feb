@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 ### Dr. Priyanga Talagala
 ]
 .date[
-### 30-06-2024
+### 15-02-2026
 ]
 
 ---
@@ -531,10 +531,6 @@ where `\(k = (m − 1)/2\)` is the half-width and the weights are denoted by `\(
 - Weighted MA are smoother.
 ---
 
-&lt;img src="fig/MA_covid.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-https://coronavirus.jhu.edu/data/new-cases
----
 ## Trend-cycle
 
 - Multiplicative decomposition: `\(y_t = T_t\times S_t \times R_t = \hat{T}_t \times \hat{S}_t \times \hat{R}_t\)`
@@ -560,17 +556,7 @@ https://coronavirus.jhu.edu/data/new-cases
 - Not robust to outliers.
 - Newer methods designed to overcome these problems.
 ---
-class: center, middle, inverse
-# History of time series decomposition
----
-## History of time series decomposition
 
-  *  Classical method originated in 1920s.
-  *  Census II method introduced in 1957. Basis for X-11 method and variants (including X-12-ARIMA, X-13-ARIMA)
-  *  STL method introduced in 1983
-  *  TRAMO/SEATS introduced in 1990s.
-
----
 ## STL decomposition
 
   *  STL: "Seasonal and Trend decomposition using Loess"
@@ -671,10 +657,10 @@ us_retail_employment |&gt;
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
